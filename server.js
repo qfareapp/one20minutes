@@ -1,6 +1,7 @@
 const path = require("path");
 const fs = require("fs");
 const express = require("express");
+const cors = require("cors");
 const multer = require("multer");
 const nodemailer = require("nodemailer");
 const mongoose = require("mongoose");
@@ -64,6 +65,17 @@ const upload = multer({
   storage,
   limits: { fileSize: 10 * 1024 * 1024 }
 });
+
+const corsOrigins = (process.env.CORS_ORIGIN || "")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+app.use(
+  cors({
+    origin: corsOrigins.length ? corsOrigins : true
+  })
+);
 
 app.use(express.static(__dirname));
 
